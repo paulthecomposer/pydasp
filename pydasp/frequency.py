@@ -31,12 +31,12 @@ class Frequency:
         Calculate nth harmonic of a frequency spectrum.
 
     """
-    
+
     # Dictionary stores frequencies of white notes in 0th 8ve
     pitch_classes = {
         'c': 16.55, 'd': 18.34, 'e': 20.6, 'f': 21.83,
         'g': 24.5, 'a': 27.5, 'b': 30.87
-        }   
+        }
 
     def __init__(self, hertz):
 
@@ -61,7 +61,7 @@ class Frequency:
         Parameters
         ----------
         pitch : str
-            Note name(A - G), optionally a # or b (representing a sharp or flat),
+            Note name(A - G), optionally a # or b (sharp or flat),
             numeric octave value. For, example 'A#4'.
 
         Returns
@@ -79,13 +79,15 @@ class Frequency:
 
         # Validate accidental
         if (len(pitch) == 3 and pitch[1] != '#' and pitch[1] != 'b'):
-            raise ValueError('Invalid pitch: Accidentals # and b are permitted')
+            raise ValueError(
+                'Invalid pitch: Accidentals # and b are permitted')
 
         # Validate octave and convert to int
         try:
             n_octaves = int(pitch[-1])
         except Exception as exc:
-            raise ValueError ('Invalid pitch: Octave value 0 - 9 permitted') from exc
+            raise ValueError(
+                'Invalid pitch: Octave value 0 - 9 permitted') from exc
 
         # Set hz to frequency of 0th octave
         self.hertz = self.pitch_classes[pitch[0].lower()]
@@ -102,7 +104,8 @@ class Frequency:
         elif pitch[1] == 'b':
             self.transpose_by_interval(-1)
 
-    def transpose_by_interval(self, n_intervals=1, interval_class=1, octave_div=12):
+    def transpose_by_interval(
+            self, n_intervals=1, interval_class=1, octave_div=12):
         """
         Transpose by n * interval class. By default, transpose by 1 semitione.
 
@@ -120,10 +123,9 @@ class Frequency:
         none
         """
 
-        # Each interval = freq multiplied by 2 to the power of the octave division
+        # Each interval = freq * 2 to the power of the octave division
         transpose_by = n_intervals * interval_class
         self.hertz *= round(((2 ** (1 / octave_div)) ** (transpose_by)), 2)
-
 
     def spectrum(self, n_harmonics, multiplier=1):
         """
@@ -144,7 +146,6 @@ class Frequency:
 
         harmonic = count(self.hertz, (self.hertz * multiplier))
         return [next(harmonic) for i in range(n_harmonics)]
-
 
     def nth_harmonic(self, nth, multiplier=1):
         """

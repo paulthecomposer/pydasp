@@ -10,6 +10,7 @@ import numpy as np
 
 SPS = 44100
 
+
 class Envelope:
     """
     A class to represent an adsr envelope.
@@ -54,17 +55,16 @@ class Envelope:
     def adsr(self):
         """Get or set envelope values as tuple"""
         return (self.attack, self.decay, self.sustain, self.release,
-        self.peak_amp, self.sus_amp)
+                self.peak_amp, self.sus_amp)
 
     @adsr.setter
     def adsr(self, adsr):
         (self.attack, self.decay, self.sustain, self.release,
-        self.peak_amp, self.sus_amp) = adsr
-
+            self.peak_amp, self.sus_amp) = adsr
 
     def make(self):
         """
-        Create a numpy array containing the amplitude of each sample of evelope.
+        Create a 1D array containing the amplitude of each sample of evelope.
 
         Parameters
         ----------
@@ -77,16 +77,16 @@ class Envelope:
 
         return np.concatenate(
 
-            (# Amplitude for each sample during attack
-            np.linspace (0, self.peak_amp, int(self.attack * SPS)),
+            (  # Amplitude for each sample during attack
+                np.linspace(0, self.peak_amp, int(self.attack * SPS)),
 
-            # Amplitude for each sample during decay
-            np.linspace (self.peak_amp, self.sus_amp, int(self.decay * SPS)),
+                # Amplitude for each sample during decay
+                np.linspace(self.peak_amp, self.sus_amp,
+                            int(self.decay * SPS)),
 
-            # Amplitude for each sample suring sustain
-            np.full(int(self.sustain * SPS), self.sus_amp),
+                # Amplitude for each sample suring sustain
+                np.full(int(self.sustain * SPS), self.sus_amp),
 
-            # Amplitude for each smaple during release
-            np.linspace(self.sus_amp, 0, int(self.release * SPS))
+                # Amplitude for each smaple during release
+                np.linspace(self.sus_amp, 0, int(self.release * SPS))
             ))
-            

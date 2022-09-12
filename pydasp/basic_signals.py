@@ -16,10 +16,11 @@ import numpy as np
 from scipy.io.wavfile import write
 from pydasp.adsr_envelope import Envelope
 from pydasp.frequency import Frequency
-from pydasp.audio_io import equalise_len, mix
+from pydasp.audio_io import equalise_len
 
 
 SPS = 44100
+
 
 class Signal(ABC):
     """
@@ -91,14 +92,13 @@ class Signal(ABC):
         none
         """
 
-        #Check whether a second audio channel was provided
+        # Check whether a second audio channel was provided
         if np.any(channel_1):
 
             # Ensure channels are of equal length and make a 2D array
             # containing each channel's audio in its respective row
             sterio = np.vstack(equalise_len((self.signal, channel_1)))
 
-            # Reshape the array to contain each channel's audio in its respective column.
             # Attenuate and convert to int16 data-type
             sound = np.int16((sterio.transpose() * attenuation) * 32767)
 
@@ -132,12 +132,17 @@ class Signal(ABC):
         if trim_to_s > 0:
 
             # Delete samples from beginning to trim_to_s
-            trimmed_signal = np.delete(trimmed_signal, np.s_[0:int(trim_to_s * SPS)])
+            trimmed_signal = np.delete(
+                trimmed_signal, np.s_[0:int(trim_to_s * SPS)])
 
-        # Delete samples from trim_from_s to end
         if trim_from_s < self.duration:
-            trimmed_signal = np.delete(trimmed_signal,
-            np.s_[int(trim_from_s * SPS):int(self.duration * SPS)])
+
+            # Delete samples from trim_from_s to end
+            trimmed_signal = np.delete
+            (
+                trimmed_signal,
+                np.s_[int(trim_from_s * SPS):int(self.duration * SPS)]
+            )
         return trimmed_signal
 
     def split(self, *split_at_s):
@@ -194,9 +199,11 @@ class Rest(Signal):
     @duration.setter
     def duration(self, duration):
         if not isinstance(duration, (int, float)):
-            raise TypeError('Invalid duration: Types int and float are permitted')
+            raise TypeError(
+                'Invalid duration: Types int and float are permitted')
         if duration <= 0:
-            raise ValueError('Invalid duration: Values greater than 0 are permitted')
+            raise ValueError(
+                'Invalid duration: Values greater than 0 are permitted')
         self._duration = duration
 
     @property
@@ -268,7 +275,6 @@ class Noise(Signal):
     def env(self, env):
         self._env = Envelope(env)
 
-
     @classmethod
     def new_signal(cls, env):
         """
@@ -304,7 +310,7 @@ class Sine(Signal):
     ----------
     freq : int, float ot str
         Frequency in hertz or pitch (Note name(A - G), optionally a # or b
-        (representing a sharp or flat), numeric octave value. For, example 'A#4').
+        (sharp or flat), numeric octave value. For, example 'A#4').
     env : tuple
         Values for envelope a, d, s, r, peak amp, sus amp.
     phase : int
@@ -358,7 +364,7 @@ class Sine(Signal):
     @phase.setter
     def phase(self, phase):
         if phase > 359 or phase < 0:
-            raise ValueError (
+            raise ValueError(
                 'Invalid phase offset: Values between 0 and 359 permitted')
         self._phase = phase
 
@@ -371,7 +377,6 @@ class Sine(Signal):
     def signal(self):
         return self._make_signal()
 
-
     @classmethod
     def new_signal(cls, freq, env, phase=0):
         """
@@ -381,7 +386,7 @@ class Sine(Signal):
         ----------
         freq : int, float ot str
             Frequency in hertz or pitch (Note name(A - G), optionally a # or b
-            (representing a sharp or flat), numeric octave value. For, example 'A#4').
+            (sharp or flat), numeric octave value. For, example 'A#4').
         env : tuple
             Values for envelope a, d, s, r, peak amp, sus amp.
         phase : int
@@ -395,7 +400,6 @@ class Sine(Signal):
 
     def _make_signal(self):
 
-        # Calculate each sample of sinewave with required frequency and adsr values
+        # Calculate each sample of sine with required frequency and adsr values
         return (np.sin(self.phase + 2 * np.pi * self.each_sample
-        * self.freq.hertz / SPS)) * self.env.make()
-        
+                * self.freq.hertz / SPS)) * self.env.make()

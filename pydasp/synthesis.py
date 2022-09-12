@@ -89,7 +89,6 @@ class Signals(Signal):
     def duration(self):
         return len(self.signal) / SPS
 
-
     def append(self, new_signal):
         """
         Append audio signal with a new signal.
@@ -130,7 +129,7 @@ class Signals(Signal):
         ----------
         freq : int, str or float
             Frequency in hertz or pitch (Note name(A - G), optionally a # or b
-            (representing a sharp or flat), numeric octave value. For, example 'A#4'.)
+            (sharp or flat), numeric octave value. For, example 'A#4').
         env : tuple
             Values for envelope a, d, s, r, peak amp, sus amp.
         phase : int
@@ -151,7 +150,7 @@ class Signals(Signal):
         ----------
         freq : int, str or float
             Frequency in hertz or pitch (Note name(A - G), optionally a # or b
-            (representing a sharp or flat), numeric octave value. For, example 'A#4').
+            (sharp or flat), numeric octave value. For, example 'A#4').
         env : tuple
             Values for envelope a, d, s, r, peak amp, sus amp.
         n_harmonics : int
@@ -172,7 +171,7 @@ class Signals(Signal):
         ----------
         freq : int, str or float
             Frequency in hertz or pitch (Note name(A - G), optionally a # or b
-            (representing a sharp or flat), numeric octave value. For, example 'A#4').
+            (sharp or flat), numeric octave value. For, example 'A#4').
         env : tuple
             Values for envelope a, d, s, r, peak amp, sus amp.
         n_harmonics : int
@@ -193,7 +192,7 @@ class Signals(Signal):
         ----------
         freq : int, str or float
             Frequency in hertz or pitch (Note name(A - G), optionally a # or b
-            (representing a sharp or flat), numeric octave value. For, example 'A#4').
+            (sharp or flat), numeric octave value. For, example 'A#4').
         env : tuple
             Values for envelope a, d, s, r, peak amp, sus amp.
         n_harmonics : int
@@ -256,15 +255,18 @@ class Signals(Signal):
         None
         """
 
-        for i in range (echoes):
+        for i in range(echoes):
             if i == 0:
                 delayed = self.signal
 
             else:
 
                 # Create delayed signal
-                delayed = Signals((Rest.new_signal(delay_time * i),
-                delayed * (1 - amp_reduction))).signal
+                delayed = Signals
+                (
+                    (Rest.new_signal(delay_time * i),
+                        delayed * (1 - amp_reduction))
+                ).signal
 
                 # Combine voice with delayed signals
                 self.mix_with(delayed)
@@ -304,7 +306,8 @@ class Signals(Signal):
         None
         """
 
-        self.signal = Modulator.amp_modulated(self.signal, modulator, sensitivity)
+        self.signal = Modulator.amp_modulated(
+            self.signal, modulator, sensitivity)
 
 
 class AdditiveWaveform(Signal):
@@ -362,8 +365,8 @@ class AdditiveWaveform(Signal):
         """Return audio signal for wave"""
         return self._make_signal()
 
-
-    def _make_wave(self, freq, phase_shift=0, nth_phase_increment=0):
+    def _make_wave(
+            self, freq, phase_shift=0, nth_phase_increment=0):
 
         # calculate phase for nth increment
         phase = phase_shift * nth_phase_increment
@@ -372,7 +375,6 @@ class AdditiveWaveform(Signal):
         phase -= (360 * (phase // 360))
 
         return Sine.new_signal(freq, self.env.adsr, phase)
-
 
     @classmethod
     def new_signal(cls, freq, env, n_harmonics):
@@ -383,7 +385,7 @@ class AdditiveWaveform(Signal):
         ----------
         freq : int, float ot str
             Frequency in hertz or pitch (Note name(A - G), optionally a # or b
-            (representing a sharp or flat), numeric octave value. For, example 'A#4').
+            (sharp or flat), numeric octave value. For, example 'A#4').
         env : tuple
             Values for envelope a, d, s, r, peak amp, sus amp.
         n_harmonics : int
@@ -410,7 +412,7 @@ class Sawtooth(AdditiveWaveform):
     ----------
     freq : int, float ot str
         Frequency in hertz or pitch (Note name(A - G), optionally a # or b
-        (representing a sharp or flat), numeric octave value. For, example 'A#4').
+        (sharp or flat), numeric octave value. For, example 'A#4').
     env : tuple
         Values for envelope a, d, s, r, peak amp, sus amp.
     n_harmonics : int
@@ -443,16 +445,14 @@ class Sawtooth(AdditiveWaveform):
         self.env = env
         self.n_harmonics = n_harmonics
 
-
-
     def _make_signal(self):
 
         # Calculate required sine frequencies (n odd harmonics)
         harmonics = self.freq.spectrum(self.n_harmonics, multiplier=1)
 
         # Combine sine waves to make required wave type
-        return mix([self._make_wave(harmonic)
-        * 1 / (i + 1) for i, harmonic in enumerate(harmonics)])
+        return mix([self._make_wave(harmonic) * 1 / (i + 1)
+                    for i, harmonic in enumerate(harmonics)])
 
 
 class Square(AdditiveWaveform):
@@ -465,7 +465,7 @@ class Square(AdditiveWaveform):
     ----------
     freq : int, float ot str
         Frequency in hertz or pitch (Note name(A - G), optionally a # or b
-        (representing a sharp or flat), numeric octave value. For, example 'A#4').
+        (sharp or flat), numeric octave value. For, example 'A#4').
     env : tuple
         Values for envelope a, d, s, r, peak amp, sus amp.
     n_harmonics : int
@@ -498,15 +498,14 @@ class Square(AdditiveWaveform):
         self.env = env
         self.n_harmonics = n_harmonics
 
-
     def _make_signal(self):
 
         # Calculate required sine frequencies (n odd harmonics)
         harmonics = self.freq.spectrum(self.n_harmonics, multiplier=2)
 
         # Combine sine waves to make required wave type
-        return mix([self._make_wave(harmonic)
-        * 1 / (i * 2 + 1) for i, harmonic in enumerate(harmonics)])
+        return mix([self._make_wave(harmonic) * 1 / (i * 2 + 1)
+                    for i, harmonic in enumerate(harmonics)])
 
 
 class Triangular(AdditiveWaveform):
@@ -519,7 +518,7 @@ class Triangular(AdditiveWaveform):
     ----------
     freq : int, float ot str
         Frequency in hertz or pitch (Note name(A - G), optionally a # or b
-        (representing a sharp or flat), numeric octave value. For, example 'A#4').
+        (sharp or flat), numeric octave value. For, example 'A#4').
     env : tuple
         Values for envelope a, d, s, r, peak amp, sus amp.
     n_harmonics : int
@@ -552,7 +551,6 @@ class Triangular(AdditiveWaveform):
         self.env = env
         self.n_harmonics = n_harmonics
 
-
     def _make_signal(self):
 
         def harmonic_amplitude(harmonic):
@@ -564,9 +562,11 @@ class Triangular(AdditiveWaveform):
         # Calculate required sine frequencies (n odd harmonics)
         harmonics = self.freq.spectrum(self.n_harmonics, multiplier=2)
 
-        # Combine sine waves and change the phase of every other harmonic by 180°
-        return mix([self._make_wave(harmonic, 180, i)
-        * harmonic_amplitude(harmonic) for i, harmonic in enumerate(harmonics)])
+        # Combine sines, change the phase of every other harmonic by 180°
+        return mix(
+            [self._make_wave(harmonic, 180, i) * harmonic_amplitude(harmonic)
+                for i, harmonic in enumerate(harmonics)]
+            )
 
 
 class Modulator(Signal):
@@ -727,7 +727,6 @@ class ButterworthFilter(Signal):
     def signal(self, signal):
         self._signal = signal
 
-
     def low_pass(self, cut_off_hz, nth_order):
         """
         Apply low-pass filter to signal.
@@ -808,5 +807,6 @@ class ButterworthFilter(Signal):
         elif isinstance(cut_off_hz, (tuple)):
             cut_off_hz = tuple(2 * hz / SPS for hz in cut_off_hz)
 
-        numerator, denominator = sp_signal.butter(nth_order, cut_off_hz, filter_type)
+        numerator, denominator = sp_signal.butter(
+            nth_order, cut_off_hz, filter_type)
         self.signal = sp_signal.filtfilt(numerator, denominator, self.signal)

@@ -6,7 +6,7 @@ setup(
     author='Paul Taylor',
     author_email='paulthecomposer@yahoo.com',
     description='A package for digital audio signal processing',
-    packages=find_packages(),
+    packages=['pydasp'],
     py_modules=['adsr_envelope', 'audio_io', 'basic_signals', 'frequency', 'synthesis'],
     install_requires=['numpy', 'SciPy', 'sounddevice'],
     keywords=['python', 'audio', 'DSP', 'music', 'sound', 'audio synthesis', 'composition']
