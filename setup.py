@@ -7,8 +7,7 @@ setup(
     author_email='paulthecomposer@yahoo.com',
     description='A package for digital audio signal processing',
     packages=find_packages(),
-    py_modules=['adsr_envelop', 'audio_io', 'basic_signals', 'frequency', 'synthesis'],
-    package_dir={'' : 'src'},
-    install_requires=['numpy', 'scipi', 'sounddevice'],
+    py_modules=['adsr_envelope', 'audio_io', 'basic_signals', 'frequency', 'synthesis'],
+    install_requires=['numpy', 'SciPy', 'sounddevice'],
     keywords=['python', 'audio', 'DSP', 'music', 'sound', 'audio synthesis', 'composition']
 )
