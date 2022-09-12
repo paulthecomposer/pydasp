@@ -14,9 +14,9 @@ from abc import ABC, abstractmethod
 import sounddevice as sd
 import numpy as np
 from scipy.io.wavfile import write
-from adsr_envelope import Envelope
-from frequency import Frequency
-from audio_io import equalise_len, mix
+from pydasp.src.adsr_envelope import Envelope
+from pydasp.src.frequency import Frequency
+from pydasp.src.audio_io import equalise_len, mix
 
 
 SPS = 44100

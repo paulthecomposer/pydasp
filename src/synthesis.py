@@ -15,10 +15,10 @@ Classes:
 from abc import abstractmethod
 import numpy as np
 from scipy import signal as sp_signal
-from frequency import Frequency
-from adsr_envelope import Envelope
-from basic_signals import Signal, Rest, Noise, Sine
-from audio_io import equalise_len, mix
+from pydasp.src.frequency import Frequency
+from pydasp.src.adsr_envelope import Envelope
+from pydasp.src.basic_signals import Signal, Rest, Noise, Sine
+from pydasp.src.audio_io import equalise_len, mix
 
 SPS = 44100
 
