@@ -262,8 +262,7 @@ class Signals(Signal):
             else:
 
                 # Create delayed signal
-                delayed = Signals
-                (
+                delayed = Signals(
                     (Rest.new_signal(delay_time * i),
                         delayed * (1 - amp_reduction))
                 ).signal
@@ -275,6 +274,62 @@ class Signals(Signal):
         """Remove leading and trailing silence"""
 
         self.signal = np.trim_zeros(self.signal)
+
+
+    def trim(self, trim_to_s=0, trim_from_s=None):
+        """
+        Trim n seconds from beginning and/or end of audio signal.
+
+        Parameters
+        ----------
+        trim_to_s : float
+            Trim from beginning to time-point (in seconds) in signal.
+        trim_from_s : float
+            Trim from time_point (in seconds)in signal to end.
+
+        Returns
+        -------
+        1D array
+        """
+        if not trim_from_s:
+
+            # Set trim_from_S to end of signal
+            trim_from_s = self.duration
+
+        trimmed_signal = self.signal
+        if trim_to_s > 0:
+
+            # Delete samples from beginning to trim_to_s
+            trimmed_signal = np.delete(
+                trimmed_signal, np.s_[0:int(trim_to_s * SPS)])
+
+        if trim_from_s < self.duration:
+
+            # Delete samples from trim_from_s to end
+            trimmed_signal = np.delete
+            (
+                trimmed_signal,
+                np.s_[int(trim_from_s * SPS):int(self.duration * SPS)]
+            )
+        return trimmed_signal
+
+    def split(self, *split_at_s):
+        """
+        Split audio signal into shorter signals.
+
+        Parameters
+        ----------
+        *split_at_s : *floats
+            Split signal at time-points (in seconds) in signal.
+
+        Returns
+        -------
+        List of 1D arrays
+        """
+
+        # Split into a list of sub-arrays at required time-points
+        return np.split(self.signal, [int(s * SPS) for s in split_at_s])
+
 
     def modulate_frequency(self, modulator):
         """
