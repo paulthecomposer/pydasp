@@ -9,7 +9,6 @@ Classes:
     Sine
 """
 
-import time
 from abc import ABC, abstractmethod
 import sounddevice as sd
 import numpy as np
@@ -70,9 +69,7 @@ class Signal(ABC):
         none
         """
 
-        sd.play(self.signal * attenuation, SPS)
-        time.sleep(len(self.signal) / SPS + 0.5)
-        sd.stop()
+        sd.play(self.signal * attenuation, SPS, blocking=True)
 
     def write_wav(self, file_name, channel_1=None, attenuation=0.3):
         """
