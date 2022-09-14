@@ -76,7 +76,7 @@ def signal_from_wav(wav_file):
     # If sterio
     if np.ndim(signal) == 2:
 
-        # Return a sub-arrays for channels 1 and 2
+        # Return sub-arrays for channels 1 and 2
         channel_0, channel_1 = np.split(
             signal, 2, 1)[0], np.split(signal, 2, 1)[1]
         return 'STERIO', channel_0, channel_1
