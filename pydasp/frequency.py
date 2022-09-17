@@ -73,33 +73,34 @@ class Frequency:
         if (len(pitch) < 2 or len(pitch) > 3):
             raise ValueError('Invalid pitch: Length of 2 or 3 is permitted')
 
-        # Validate pitch
-        if pitch[0].lower() not in self.pitch_classes:
-            raise ValueError('Invalid pitch: Letters A - G are permitted')
-
-        # Validate accidental
-        if (len(pitch) == 3 and pitch[1] != '#' and pitch[1] != 'b'):
-            raise ValueError(
-                'Invalid pitch: Accidentals # and b are permitted')
-
-        # Validate octave and convert to int
         try:
-            n_octaves = int(pitch[-1])
+
+            # Set hz to frequency of 0th octave
+            self.hertz = self.pitch_classes[pitch[0].lower()]
+        except Exception as exc:
+            raise ValueError(
+                'Invalid pitch: Letters A - G are permitted') from exc
+
+        try:
+
+            # Transpose by n octaves
+            self.transpose_by_interval(int(pitch[-1]), 12)
         except Exception as exc:
             raise ValueError(
                 'Invalid pitch: Octave value 0 - 9 permitted') from exc
 
-        # Set hz to frequency of 0th octave
-        self.hertz = self.pitch_classes[pitch[0].lower()]
+        try:
+            if len(pitch) == 3 and pitch[1] == '#':
 
-        # Transpose by n octaves
-        self.transpose_by_interval(n_octaves, 12)
+                # Raise by a semitone
+                self.transpose_by_interval(1)
+            elif len(pitch) == 3 and pitch[1] == 'b':
 
-        # Raise by a semitone if #, lower by a semitone of b
-        if pitch[1] == '#':
-            self.transpose_by_interval(1)
-        elif pitch[1] == 'b':
-            self.transpose_by_interval(-1)
+                # Lower by a semitone
+                self.transpose_by_interval(-1)
+        except Exception as exc:
+            raise ValueError(
+                'Invalid pitch: Accidentals # and b are permitted') from exc
 
     def transpose_by_interval(
             self, n_intervals=1, interval_class=1, octave_div=12):
