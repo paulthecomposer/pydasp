@@ -92,9 +92,6 @@ class Frequency:
         # Set hz to frequency of 0th octave
         self.hertz = self.pitch_classes[pitch[0].lower()]
 
-        # Cast 8ve value to int
-        n_octaves = int(pitch[-1])
-
         # Transpose by n octaves
         self.transpose_by_interval(n_octaves, 12)
 
