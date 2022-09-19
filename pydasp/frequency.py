@@ -29,6 +29,8 @@ class Frequency:
         Calculate a frequency spectrum.
     nth_harmonic(self, nth, multiplier=1)
         Calculate nth harmonic of a frequency spectrum.
+    repr()
+        Return string representation of frequency in Hz.
 
     """
 
@@ -165,3 +167,10 @@ class Frequency:
         """
 
         return Frequency.spectrum(self.hertz, nth, multiplier)[-1]
+
+    def __repr__(self):
+        """
+        Return string representation of frequency in hertz
+        """
+
+        return repr(self.hertz)
