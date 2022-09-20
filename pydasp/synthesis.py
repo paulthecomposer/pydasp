@@ -207,14 +207,17 @@ class Signals(Signal):
         Parameters
         ----------
         other : obj
-            obj with signal to append.
+            signal or obj with signal to append.
 
         Returns
         -------
         Signals
         """
 
-        return Signals((self.signal, other.signal))
+        if hasattr(other, 'signal'):
+            return Signals((self.signal, other.signal))
+        else:
+            return Signals((self.signal, other))
 
 
 class AdditiveWaveform(Signal):
