@@ -68,6 +68,8 @@ class Signals(Signal):
         Remove leading and trailing silence.
     modulate_frequency(modulator):
         Modulate frequency of audio signal.
+    add(other):
+        Return concatenated Signals object
 
     """
 
@@ -281,7 +283,7 @@ class Signals(Signal):
 
         Parameters
         ----------
-        Modulator : iD array
+        modulator : iD array
             To modulate audio signal.
 
         Returns
@@ -297,7 +299,7 @@ class Signals(Signal):
 
         Parameters
         ----------
-        Modulator : iD array
+        modulator : iD array
             Modulate audio signal.
 
         Returns
@@ -307,6 +309,22 @@ class Signals(Signal):
 
         self.signal = Modulator.amp_modulated(
             self.signal, modulator, sensitivity)
+
+    def __add__(self, other):
+        """
+        Return concatenated Signals object
+
+        Parameters
+        ----------
+        other : obj
+            obj with signal to append.
+
+        Returns
+        -------
+        Signals
+        """
+
+        return Signals((self.signal, other.signal))
 
 
 class AdditiveWaveform(Signal):
