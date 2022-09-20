@@ -46,18 +46,8 @@ class Signals(Signal):
         Equalise length of n signals by appending silence to shorter signals.
     mix(*signals):
         Mix n signals into a singal audio signal.
-    appends(new_signal):
+    append(new_signal):
         Append audio signal with a new signal.
-    append_noise(env):
-        Append audio signal with a new noise.
-    append_sine(freq, env, phase=0):
-        Append audio signal with a new sine wave.
-    append_sawtooth(freq, env, n_harmonics):
-        Append audio signal with a new sawtooth wave.
-    append_square(freq, env, n_harmonics):
-        Append audio signal with a new square wave.
-    append_triangularfreq, env, n_harmonics):
-        Append audio signal with a new triangular wave.
     mix_with(*signals):
         Mix n signals with audio signal.
     loop(n_times):
@@ -106,106 +96,6 @@ class Signals(Signal):
         """
 
         self.signal = np.concatenate((self.signal, new_signal))
-
-    def append_noise(self, env):
-        """
-        Append audio signal with a new noise.
-
-        Parameters
-        ----------
-        env : tuple
-            Values for envelope a, d, s, r, peak amp, sus amp.
-
-        Returns
-        -------
-        None
-        """
-
-        self.append(Noise.new_signal(env))
-
-    def append_sine(self, freq, env, phase=0):
-        """
-        Append audio signal with a new sine wave.
-
-        Parameters
-        ----------
-        freq : int, str or float
-            Frequency in hertz or pitch (Note name(A - G), optionally a # or b
-            (sharp or flat), numeric octave value. For, example 'A#4').
-        env : tuple
-            Values for envelope a, d, s, r, peak amp, sus amp.
-        phase : int
-            Phase off-set of sine (0 - 360)
-
-        Returns
-        -------
-        None
-        """
-
-        self.append(Sine.new_signal(freq, env, phase))
-
-    def append_sawtooth(self, freq, env, n_harmonics):
-        """
-        Append audio signal with a new sawtooth wave.
-
-        Parameters
-        ----------
-        freq : int, str or float
-            Frequency in hertz or pitch (Note name(A - G), optionally a # or b
-            (sharp or flat), numeric octave value. For, example 'A#4').
-        env : tuple
-            Values for envelope a, d, s, r, peak amp, sus amp.
-        n_harmonics : int
-            Number of harmonics in sawtooth wave.
-
-        Returns
-        -------
-        None
-        """
-
-        self.append(Sawtooth.new_signal(freq, env, n_harmonics))
-
-    def append_square(self, freq, env, n_harmonics):
-        """
-        Append audio signal with a new square wave.
-
-        Parameters
-        ----------
-        freq : int, str or float
-            Frequency in hertz or pitch (Note name(A - G), optionally a # or b
-            (sharp or flat), numeric octave value. For, example 'A#4').
-        env : tuple
-            Values for envelope a, d, s, r, peak amp, sus amp.
-        n_harmonics : int
-            Number of harmonics in square wave.
-
-        Returns
-        -------
-        None
-        """
-
-        self.append(Square.new_signal(freq, env, n_harmonics))
-
-    def append_triangular(self, freq, env, n_harmonics):
-        """
-        Append audio signal with a new triangular wave.
-
-        Parameters
-        ----------
-        freq : int, str or float
-            Frequency in hertz or pitch (Note name(A - G), optionally a # or b
-            (sharp or flat), numeric octave value. For, example 'A#4').
-        env : tuple
-            Values for envelope a, d, s, r, peak amp, sus amp.
-        n_harmonics : int
-            Number of harmonics in triangular wave.
-
-        Returns
-        -------
-        None
-        """
-
-        self.append(Triangular.new_signal(freq, env, n_harmonics))
 
     def mix_with(self, *signals):
         """
