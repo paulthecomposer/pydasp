@@ -259,7 +259,10 @@ class AdditiveWaveform(Signal):
 
     @freq.setter
     def freq(self, freq):
-        self._freq = Frequency(freq)
+        if isinstance(freq, Frequency):
+            self._freq = freq
+        else:
+            self._freq = Frequency(freq)
 
     @property
     def env(self):
