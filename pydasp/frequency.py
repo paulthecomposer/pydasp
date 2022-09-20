@@ -31,7 +31,14 @@ class Frequency:
         Calculate nth harmonic of a frequency spectrum.
     repr()
         Return string representation of frequency in Hz.
-
+    add()
+        Add frequency in HZ and return new object.
+    sub()
+        Subtract frequency in HZ and return new object.
+    mul()
+        Multiply frequency in HZ and return new object.
+    truediv()
+        Divide frequency in HZ and return new object.
     """
 
     # Dictionary stores frequencies of white notes in 0th 8ve
@@ -174,3 +181,36 @@ class Frequency:
         """
 
         return repr(self.hertz)
+
+    def __add__(self, other):
+        """
+        Add frequency in HZ and return new object.
+        """
+        if hasattr(other, 'hertz'):
+            return Frequency(self.hertz + other.hertz)
+        return Frequency(self.hertz + other)
+
+    def __sub__(self, other):
+        """
+        Subtract frequency in HZ and return new object.
+        """
+        if hasattr(other, 'hertz'):
+            return Frequency(self.hertz - other.hertz)
+        return Frequency(self.hertz - other)
+
+    def __mul__(self, other):
+        """
+        Multiply frequency in HZ and return new object.
+        """
+        if hasattr(other, 'hertz'):
+            return Frequency(self.hertz * other.hertz)
+        return Frequency(self.hertz * other)
+
+    def __truediv__(self, other):
+        """
+        Divide frequency in HZ and return new object.
+        """
+        if hasattr(other, 'hertz'):
+            return Frequency(self.hertz / other.hertz)
+        return Frequency(self.hertz / other)
+
