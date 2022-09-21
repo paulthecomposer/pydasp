@@ -213,4 +213,3 @@ class Frequency:
         if hasattr(other, 'hertz'):
             return Frequency(self.hertz / other.hertz)
         return Frequency(self.hertz / other)
-

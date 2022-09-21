@@ -17,7 +17,7 @@ import numpy as np
 from scipy import signal as sp_signal
 from pydasp.frequency import Frequency
 from pydasp.adsr_envelope import Envelope
-from pydasp.basic_signals import Signal, Rest, Noise, Sine
+from pydasp.basic_signals import Signal, Rest, Sine
 from pydasp.audio_io import equalise_len, mix
 
 SPS = 44100
@@ -72,7 +72,15 @@ class Signals(Signal):
 
     @signal.setter
     def signal(self, signal):
-        if (np.ndim(signal[1])) == 1:
+        if hasattr(signal, 'signal'):
+
+            # Access signal attribute of argument
+            self._signal = signal.signal
+        elif hasattr(signal[0], 'signal'):
+
+            # Concatenate signal attributes of argument
+            self._signal = np.concatenate(tuple(s.signal for s in signal))
+        elif (np.ndim(signal[1])) == 1:
             self._signal = np.concatenate(signal)
         else:
             self._signal = signal
@@ -202,22 +210,21 @@ class Signals(Signal):
 
     def __add__(self, other):
         """
-        Return concatenated Signals object
+        Concatenated and return new Signals object
 
-        Parameters
-        ----------
-        other : obj
-            signal or obj with signal to append.
-
-        Returns
-        -------
-        Signals
         """
 
         if hasattr(other, 'signal'):
             return Signals((self.signal, other.signal))
         else:
             return Signals((self.signal, other))
+
+    def __mul__(self, other):
+        """
+        Loop signal n times and return new Signals object
+
+        """
+        return Signals(tuple(self.signal for i in range(other)))
 
 
 class AdditiveWaveform(Signal):
