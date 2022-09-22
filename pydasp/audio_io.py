@@ -38,7 +38,7 @@ def equalise_len(arrays):
     ]
 
 
-def mix(*signals):
+def mix(signals):
     """
     Mix signals into a single audio signal.
 
@@ -52,8 +52,10 @@ def mix(*signals):
     1D arrays
     """
 
+    signals = tuple(s.signal if hasattr(s, 'signal') else s for s in signals)
+
     # Combine signals
-    mix = sum(equalise_len(*signals))
+    mix = sum(equalise_len(signals))
     return mix / mix.max()
 
 

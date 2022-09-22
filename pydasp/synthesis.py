@@ -50,8 +50,6 @@ class Signals(Signal):
         Append audio signal with a new signal.
     mix_with(*signals):
         Mix n signals with audio signal.
-    loop(n_times):
-        Repeat signal n times.
     delay(delay_time, amp_reduction, echoes):
         Audio delay effect.
     strip_silence():
@@ -60,6 +58,8 @@ class Signals(Signal):
         Modulate frequency of audio signal.
     add(other):
         Return concatenated Signals object
+    mul(other):
+        Retun new Signals object with signal repated * other
 
     """
 
@@ -105,7 +105,7 @@ class Signals(Signal):
 
         self.signal = np.concatenate((self.signal, new_signal))
 
-    def mix_with(self, *signals):
+    def mix_with(self, signals):
         """
         Mix signals with audio signal.
 
@@ -119,23 +119,13 @@ class Signals(Signal):
         None
         """
 
-        self.signal = mix((self.signal, *signals))
+        # If one additional signal is provided
+        if not isinstance(signals, tuple):
+            self.signal = mix((self.signal, signals))
 
-    def loop(self, n_times):
-        """
-        Repeat signal n times.
-
-        Parameters
-        ----------
-        n_times : int
-            Times to repeat signal.
-
-        Returns
-        -------
-        None
-        """
-
-        self.signal = np.tile(self.signal, n_times)
+        # If multiple signals are provided
+        else:
+            self.signal = mix((self.signal, *signals))
 
     def delay(self, delay_time, amp_reduction, echoes):
         """
@@ -278,7 +268,10 @@ class AdditiveWaveform(Signal):
 
     @env.setter
     def env(self, env):
-        self._env = Envelope(env)
+        if isinstance(env, Envelope):
+            self._env = env
+        else:
+            self._env = Envelope(env)
 
     @property
     def signal(self):

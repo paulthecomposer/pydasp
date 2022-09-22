@@ -270,7 +270,10 @@ class Noise(Signal):
 
     @env.setter
     def env(self, env):
-        self._env = Envelope(env)
+        if isinstance(env, Envelope):
+            self._env = env
+        else:
+            self._env = Envelope(env)
 
     @classmethod
     def new_signal(cls, env):
@@ -352,7 +355,10 @@ class Sine(Signal):
 
     @env.setter
     def env(self, env):
-        self._env = Envelope(env)
+        if isinstance(env, Envelope):
+            self._env = env
+        else:
+            self._env = Envelope(env)
 
     @property
     def phase(self):

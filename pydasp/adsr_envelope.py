@@ -36,6 +36,8 @@ class Envelope:
     -------
     make():
         Create a numpy array of all samples required for the envelope.
+    mul(other):
+        Multiply adsr time values by other
     """
 
     def __init__(self, adsr):
@@ -89,4 +91,17 @@ class Envelope:
 
                 # Amplitude for each smaple during release
                 np.linspace(self.sus_amp, 0, int(self.release * SPS))
+            ))
+
+    def __mul__(self, other):
+        """
+        Multiply adsr values by other.
+        """
+        return Envelope(
+            (
+                self.attack * other,
+                self.decay * other,
+                self.sustain * other,
+                self.release * other,
+                self.peak_amp, self.sus_amp
             ))
